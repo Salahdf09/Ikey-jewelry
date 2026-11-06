@@ -1,0 +1,37 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# builds
+client/dist/
+server/dist/
+
+# uploads (dev)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# prisma
+prisma/*.db
+prisma/dev.db
+
+# one-off MySQL→PostgreSQL migration artifacts — contain a full data dump
+# (customer PII, admin password hash) and dialect-specific migration SQL
+# that's no longer relevant now PostgreSQL is the database.
+prisma/mysql-export.json
+prisma/mysql-migrations-backup/
+
+# logs
+*.log
+npm-debug.log*
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editors
+.vscode/*
+!.vscode/extensions.json
+.idea/

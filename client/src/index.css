@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream text-wine font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display text-plum;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.rose');
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .btn-pill {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-6 py-3 text-sm font-semibold transition-all duration-200 active:scale-[0.96] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100;
+  }
+
+  .btn-primary {
+    @apply btn-pill bg-rose text-cream hover:bg-rose-deep hover:shadow-md hover:shadow-rose/30;
+  }
+
+  .btn-outline {
+    @apply btn-pill border border-rose text-rose hover:bg-rose hover:text-cream;
+  }
+
+  .btn-ghost {
+    @apply btn-pill text-wine hover:bg-blush;
+  }
+
+  .card {
+    @apply bg-cream border border-petal-light rounded-2xl;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-pill px-3 py-1 text-xs font-semibold;
+  }
+
+  .input-field {
+    @apply w-full rounded-2xl border border-petal-light bg-cream px-4 py-3 text-sm text-wine placeholder:text-wine/40 focus:border-rose focus:outline-none transition-colors;
+  }
+
+  .label-field {
+    @apply block text-sm font-semibold text-plum mb-1.5;
+  }
+
+  .nav-link {
+    @apply relative;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute left-1/2 -bottom-1 h-[1.5px] w-0 bg-rose transition-all duration-300;
+    transform: translateX(-50%);
+  }
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(90deg, theme('colors.blush') 25%, theme('colors.petal-light') 50%, theme('colors.blush') 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  .marquee-track {
+    animation: marquee 22s linear infinite;
+  }
+}
+
+@layer utilities {
+  .ikey-logo-sparkle {
+    animation: sparkle-twinkle 2.4s ease-in-out infinite;
+  }
+  .ikey-logo-sparkle-sm {
+    animation: sparkle-twinkle 2.4s ease-in-out infinite 0.5s;
+  }
+
+  /* Ambient background (JewelryBackground) — slow, independent wander
+     paths so pieces don't visibly move in lockstep. */
+  .jewel-drift-a { animation: drift-a ease-in-out infinite; }
+  .jewel-drift-b { animation: drift-b ease-in-out infinite; }
+  .jewel-drift-c { animation: drift-c ease-in-out infinite; }
+  .jewel-sparkle { animation: sparkle-twinkle 3s ease-in-out infinite; }
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.75); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes drift-a {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(14px, -18px) rotate(8deg); }
+}
+
+@keyframes drift-b {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-16px, 14px) rotate(-6deg); }
+}
+
+@keyframes drift-c {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(10px, 20px) rotate(5deg); }
+}

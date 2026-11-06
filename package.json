@@ -1,0 +1,27 @@
+{
+  "name": "ikey-store",
+  "private": true,
+  "version": "1.0.0",
+  "description": "ikey. - handmade jewelry store (Cash on Delivery, Algeria)",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,magenta \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
+    "build": "npm run build --workspace=client",
+    "start": "node server/server.js",
+    "prisma:generate": "npm run prisma:generate --workspace=server",
+    "prisma:migrate": "npm run prisma:migrate --workspace=server",
+    "prisma:migrate:deploy": "npm run prisma:migrate:deploy --workspace=server",
+    "prisma:seed": "npm run prisma:seed --workspace=server",
+    "prisma:studio": "npm run prisma:studio --workspace=server",
+    "postinstall": "npm run prisma:generate"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
