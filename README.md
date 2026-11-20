@@ -69,6 +69,7 @@ Points clés :
 | `CLIENT_URL` | Origine(s) autorisée(s) en CORS (liste séparée par des virgules) |
 | `JWT_SECRET` | Secret de signature des sessions admin (générer une valeur longue et aléatoire) |
 | `COOKIE_NAME` | Nom du cookie de session admin |
+| `COOKIE_SAME_SITE` | `lax` (défaut, frontend+API sur le même domaine) ou `none` (domaines différents, ex: Vercel) |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_SECURE` / `SMTP_USER` / `SMTP_PASSWORD` | Configuration SMTP (Nodemailer) |
 | `STORE_EMAIL` | Adresse qui reçoit la notification de nouvelle commande |
 | `MAIL_FROM_NAME` / `MAIL_FROM_ADDRESS` | Expéditeur affiché sur les emails sortants |
@@ -163,8 +164,16 @@ Le frontend et le backend peuvent être déployés ensemble (un seul process Nod
 - Backend : déployer `/server` (+ `/prisma`) sur tout hébergeur Node (Railway, Render, VPS...), avec une base PostgreSQL accessible.
 - Frontend : déployer `client/dist` sur un hébergeur statique (Netlify, Vercel, etc.), en définissant `VITE_API_URL` vers l'URL publique du backend.
 - Mettre à jour `CLIENT_URL` côté serveur pour autoriser l'origine du frontend en CORS.
+- Comme le frontend et l'API sont sur deux domaines différents, mettre `COOKIE_SAME_SITE=none` côté serveur (sinon la session admin ne persiste pas après la connexion).
 
-Dans les deux cas : ne jamais committer de fichier `.env` réel (seuls les `.env.example` sont versionnés).
+### Option C — Deux projets Vercel (frontend + API séparés)
+
+- **Projet "client"** : Root Directory = `client`, Vercel détecte Vite automatiquement (build et dossier de sortie par défaut).
+- **Projet "serveur"** : Root Directory = `server`. `server/api/index.js` réexporte l'app Express (`server/src/app.js`) sans `app.listen()` — Vercel la transforme en fonction serverless. `server/vercel.json` redirige toutes les requêtes vers cette fonction. Build Command à définir sur `npm run prisma:generate` (génère le client Prisma avant le déploiement).
+- Variables d'environnement à renseigner dans les réglages Vercel de chaque projet (jamais dans le code) : voir §3, plus `COOKIE_SAME_SITE=none` côté serveur et `VITE_API_URL` (URL du projet serveur) côté client.
+- Une fois les deux projets déployés et leurs URLs connues, mettre à jour `CLIENT_URL` (projet serveur) et `VITE_API_URL` (projet client) l'un vers l'autre, puis redéployer.
+
+Dans tous les cas : ne jamais committer de fichier `.env` réel (seuls les `.env.example` sont versionnés).
 
 ---
 

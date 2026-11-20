@@ -21,6 +21,11 @@ const env = {
 
   jwtSecret: process.env.JWT_SECRET || 'insecure-dev-secret-change-me',
   cookieName: process.env.COOKIE_NAME || 'ikey_admin_session',
+  // "lax" tant que le site et l'API sont sur le même domaine (ex: cPanel).
+  // Mettre "none" si le frontend et l'API sont déployés sur deux domaines
+  // différents (ex: Vercel) — sinon le cookie de session admin n'est pas
+  // envoyé par le navigateur après la connexion.
+  cookieSameSite: process.env.COOKIE_SAME_SITE || 'lax',
 
   smtp: {
     host: process.env.SMTP_HOST,

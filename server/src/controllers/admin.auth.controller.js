@@ -8,7 +8,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const cookieOptions = {
   httpOnly: true,
   secure: env.isProduction,
-  sameSite: 'lax',
+  sameSite: env.cookieSameSite,
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: '/',
 };
