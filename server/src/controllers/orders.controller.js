@@ -1,3 +1,4 @@
+const { waitUntil } = require('@vercel/functions');
 const orderService = require('../services/order.service');
 const emailService = require('../services/email.service');
 const ApiError = require('../utils/ApiError');
@@ -7,7 +8,9 @@ const createOrder = asyncHandler(async (req, res) => {
   const order = await orderService.createOrder(req.body);
 
   // Never let a slow/broken SMTP server delay the customer's response.
-  emailService.sendNewOrderEmail(order);
+  // waitUntil keeps a serverless function (Vercel) alive until the email is
+  // sent — otherwise it's frozen right after the response. No-op elsewhere.
+  waitUntil(emailService.sendNewOrderEmail(order));
 
   res.status(201).json({ success: true, data: order });
 });
