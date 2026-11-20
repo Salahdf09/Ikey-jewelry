@@ -11,11 +11,12 @@ export const CAMPAIGN_RATIO = 2000 / 1600;
 // Points cliquables posés SUR les bijoux de la photo.
 // x / y = position en % de la largeur / hauteur de la photo.
 // category = slug de la catégorie ouverte au clic (/produits?category=...).
+// Une seule pièce par catégorie, même si la photo en montre plusieurs du
+// même type (deux colliers, deux bagues) — sinon deux points "les colliers"
+// ou "les bagues" mènent à la même page, ce qui double inutilement l'étiquette.
 export const HOTSPOTS = [
   { id: 'collier-goutte', label: 'les colliers', x: 49.5, y: 33, category: 'colliers' },
-  { id: 'collier-lariat', label: 'les colliers', x: 48.2, y: 76, category: 'colliers' },
   { id: 'bague-ovale', label: 'les bagues', x: 42.4, y: 45.8, category: 'bagues' },
-  { id: 'bagues-chevron', label: 'les bagues', x: 67.3, y: 66.7, category: 'bagues' },
   { id: 'jonc', label: 'les bracelets', x: 21.3, y: 82, category: 'bracelets' },
 ];
 

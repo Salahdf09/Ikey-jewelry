@@ -9,6 +9,7 @@ const CATEGORY_LABELS = {
   bagues: 'Bagues',
   bracelets: 'Bracelets',
   'boucles-oreilles': "Boucles d'oreilles",
+  piercing: 'Piercing',
 };
 
 export default function ProductListing() {

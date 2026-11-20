@@ -73,8 +73,8 @@ export default function Footer() {
         <div>
           <h4 className="text-sm font-semibold text-petal mb-3">contact</h4>
           <ul className="space-y-2 text-sm text-cream/85">
-            <li>bonjour@ikey-store.com</li>
-            <li>+213 5xx xx xx xx</li>
+            <li>Ikrammekkaoui12@gmail.com</li>
+            <li>07 80724198</li>
           </ul>
         </div>
       </Reveal>

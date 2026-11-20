@@ -10,13 +10,15 @@ import Reveal from '../ui/Reveal';
 
 const EASE = [0.22, 1, 0.36, 1];
 const GOLD = '#E8C27A';
-const ORDER = ['colliers', 'bagues', 'bracelets', 'boucles-oreilles'];
+const ORDER = ['colliers', 'bagues', 'bracelets', 'boucles-oreilles', 'piercing'];
 const COLLECTION_LABEL = {
   colliers: 'voir les colliers',
   bagues: 'voir les bagues',
   bracelets: 'voir les bracelets',
   'boucles-oreilles': "voir les boucles d'oreilles",
+  piercing: 'voir les piercings',
 };
+const MAX_ITEMS = ORDER.length;
 
 // Une pièce par catégorie (dans l'ordre ci-dessus), complétée si besoin.
 function pickShowcase(products) {
@@ -26,9 +28,9 @@ function pickShowcase(products) {
     if (found) picked.push(found);
   });
   products.forEach((p) => {
-    if (picked.length < 4 && p.images?.length && !picked.includes(p)) picked.push(p);
+    if (picked.length < MAX_ITEMS && p.images?.length && !picked.includes(p)) picked.push(p);
   });
-  return picked.slice(0, 4);
+  return picked.slice(0, MAX_ITEMS);
 }
 
 function JewelGlyph({ slug }) {
@@ -48,6 +50,16 @@ function JewelGlyph({ slug }) {
         <path d="M44 30 C14 40 10 82 40 94 C60 102 84 96 96 82" stroke={GOLD} strokeWidth="5" />
         <path d="M54 18 C66 18 72 30 64 38 C58 44 48 40 48 32 C48 24 50 18 54 18 Z" fill="#FFF9FB" stroke="#4B1528" strokeWidth="3" />
         <rect x="94" y="56" width="18" height="24" rx="4" fill="#FFF9FB" stroke="#4B1528" strokeWidth="3" />
+      </svg>
+    );
+  }
+  if (slug === 'piercing') {
+    return (
+      <svg {...common} strokeLinecap="round">
+        <circle cx="60" cy="26" r="9" fill="#FFF9FB" stroke={GOLD} strokeWidth="4" />
+        <line x1="60" y1="35" x2="60" y2="52" stroke={GOLD} strokeWidth="3" />
+        <circle cx="60" cy="80" r="27" stroke={GOLD} strokeWidth="5" />
+        <circle cx="60" cy="80" r="3.5" fill={GOLD} />
       </svg>
     );
   }
