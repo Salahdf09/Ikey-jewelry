@@ -6,7 +6,8 @@ const { createClient } = require('@supabase/supabase-js');
 const env = require('../config/env');
 
 const UPLOAD_DIR = path.resolve(__dirname, '../../uploads');
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+// Not with Supabase: serverless hosts like Vercel have a read-only filesystem.
+if (env.uploadDriver !== 'supabase' && !fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
 

@@ -166,12 +166,14 @@ Le frontend et le backend peuvent être déployés ensemble (un seul process Nod
 - Mettre à jour `CLIENT_URL` côté serveur pour autoriser l'origine du frontend en CORS.
 - Comme le frontend et l'API sont sur deux domaines différents, mettre `COOKIE_SAME_SITE=none` côté serveur (sinon la session admin ne persiste pas après la connexion).
 
-### Option C — Deux projets Vercel (frontend + API séparés)
+### Option C — Vercel (un seul projet, site + API sur le même domaine)
 
-- **Projet "client"** : Root Directory = `client`, Vercel détecte Vite automatiquement (build et dossier de sortie par défaut).
-- **Projet "serveur"** : Root Directory = `server`. `server/api/index.js` réexporte l'app Express (`server/src/app.js`) sans `app.listen()` — Vercel la transforme en fonction serverless. `server/vercel.json` redirige toutes les requêtes vers cette fonction. Build Command à définir sur `npm run prisma:generate` (génère le client Prisma avant le déploiement).
-- Variables d'environnement à renseigner dans les réglages Vercel de chaque projet (jamais dans le code) : voir §3, plus `COOKIE_SAME_SITE=none` côté serveur et `VITE_API_URL` (URL du projet serveur) côté client.
-- Une fois les deux projets déployés et leurs URLs connues, mettre à jour `CLIENT_URL` (projet serveur) et `VITE_API_URL` (projet client) l'un vers l'autre, puis redéployer.
+- **Root Directory** du projet Vercel : la racine du dépôt (vide). Toute la configuration est dans `vercel.json` (racine) : installation à la racine (workspaces + client Prisma via `postinstall`), build du client, sortie `client/dist`.
+- `api/index.js` (racine) réexporte l'app Express (`server/src/app.js`) sans `app.listen()` — Vercel en fait une fonction serverless. `vercel.json` envoie `/api/*` vers cette fonction et tout le reste vers `index.html` (routes React).
+- Comme le site et l'API partagent le même domaine : pas de `VITE_API_URL`, `COOKIE_SAME_SITE` reste à `lax`, et `CLIENT_URL` = l'URL du site Vercel.
+- Le disque est en lecture seule sur Vercel : utiliser `UPLOAD_DRIVER=supabase` (voir [SUPABASE.md](./SUPABASE.md)).
+- Variables d'environnement (§3) à renseigner dans **Settings → Environment Variables** du projet Vercel, jamais dans le code.
+- Limite Vercel : une requête ne peut pas dépasser 4,5 Mo — les photos plus lourdes seront refusées à l'upload.
 
 Dans tous les cas : ne jamais committer de fichier `.env` réel (seuls les `.env.example` sont versionnés).
 
