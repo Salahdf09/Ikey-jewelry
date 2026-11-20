@@ -34,6 +34,10 @@ const env = {
   mailFromAddress: process.env.MAIL_FROM_ADDRESS || 'no-reply@ikey-store.com',
 
   uploadDriver: process.env.UPLOAD_DRIVER || 'local',
+  // Utilisés seulement si UPLOAD_DRIVER=supabase (voir SUPABASE.md).
+  supabaseUrl: process.env.SUPABASE_URL,
+  supabaseSecretKey: process.env.SUPABASE_SECRET_KEY,
+  supabaseBucket: process.env.SUPABASE_STORAGE_BUCKET || 'product-images',
 };
 
 module.exports = env;

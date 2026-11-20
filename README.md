@@ -62,7 +62,8 @@ Points clés :
 
 | Variable | Rôle |
 |---|---|
-| `DATABASE_URL` | Chaîne de connexion PostgreSQL Prisma |
+| `DATABASE_URL` | Chaîne de connexion PostgreSQL Prisma, utilisée par l'app (sur Supabase : Transaction pooler, port 6543) |
+| `DIRECT_URL` | Chaîne de connexion utilisée uniquement par les migrations Prisma (sur Supabase : Session pooler, port 5432). Voir [SUPABASE.md](./SUPABASE.md) |
 | `PORT` | Port du serveur (5000 en dev) |
 | `NODE_ENV` | `development` / `production` |
 | `CLIENT_URL` | Origine(s) autorisée(s) en CORS (liste séparée par des virgules) |
@@ -71,7 +72,8 @@ Points clés :
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_SECURE` / `SMTP_USER` / `SMTP_PASSWORD` | Configuration SMTP (Nodemailer) |
 | `STORE_EMAIL` | Adresse qui reçoit la notification de nouvelle commande |
 | `MAIL_FROM_NAME` / `MAIL_FROM_ADDRESS` | Expéditeur affiché sur les emails sortants |
-| `UPLOAD_DRIVER` | `local` (défaut) — voir §8 |
+| `UPLOAD_DRIVER` | `local` (défaut) ou `supabase` — voir §8 |
+| `SUPABASE_URL` / `SUPABASE_SECRET_KEY` / `SUPABASE_STORAGE_BUCKET` | Utilisées seulement si `UPLOAD_DRIVER=supabase`. Voir [SUPABASE.md](./SUPABASE.md) |
 | `SEED_ADMIN_NAME` / `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Identifiants du compte admin créé par `prisma:seed` |
 
 ### `client/.env` (copier `client/.env.example`, optionnel en dev)
@@ -168,7 +170,9 @@ Dans les deux cas : ne jamais committer de fichier `.env` réel (seuls les `.env
 
 ## 8. Stockage des images
 
-En développement, `UPLOAD_DRIVER=local` enregistre les images uploadées depuis le back-office dans `server/uploads/` et les sert sous `/uploads/...`. Cette logique est isolée dans `server/src/services/image.service.js` derrière une petite interface (`storage`, `getUrl`, `deleteFile`) : pour migrer vers S3, Cloudinary ou équivalent, il suffit d'implémenter ces trois éléments pour ce nouveau driver et de changer `UPLOAD_DRIVER` — aucun autre fichier n'a besoin d'être modifié.
+Par défaut (`UPLOAD_DRIVER=local`), les images uploadées depuis le back-office sont enregistrées dans `server/uploads/` et servies sous `/uploads/...`. Cette logique est isolée dans `server/src/services/image.service.js` derrière une petite interface (`storage`, `saveFile`, `deleteFile`) : pour migrer vers un autre stockage, il suffit d'implémenter ces trois éléments pour ce nouveau driver et de changer `UPLOAD_DRIVER` — aucun autre fichier n'a besoin d'être modifié.
+
+Un second driver, `UPLOAD_DRIVER=supabase`, est déjà implémenté et envoie les images vers Supabase Storage à la place du disque local. Voir [SUPABASE.md](./SUPABASE.md) pour la configuration (`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_STORAGE_BUCKET`).
 
 ---
 
